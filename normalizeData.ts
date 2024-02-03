@@ -44,20 +44,24 @@ interface IPostItem {
     body: string
 }
 
+type IById = {[key:string]: IPostItem}
+
 interface INormalizeDataRes {
-    byId: {
-        [key: string] : IPostItem
-    },
-    allIds: string[]
+    byId: IById;
+    allIds: string[];
 }
 
-const normalizeData = (unnormalizedData: IPostItem[]): INormalizeDataRes => {
-    const allIds: IPostItem[] = []
-    const mappedItems: {[key: string] : IPostItem} =  unnormalizedData.reduce((acc , item: IPostItem) => {
+const normalizeData = (unnormalizedData: IPostItem[]): INormalizeDataRes  => {
+    const allIds: string[] = []
+    const byId =  unnormalizedData.reduce((acc:IById, item: IPostItem) => {
+        allIds.push(item.id)
         acc[item.id] = item
         return acc
     }, {})
-
+    return {
+        byId,
+        allIds
+    }
 };
 
 console.log(normalizeData(posts));
